@@ -87,9 +87,13 @@ public class MainVista extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Combustible", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Georgia", 0, 14), new java.awt.Color(51, 51, 255))); // NOI18N
 
-        jLabel4.setText("Temperatura (°C):");
+        jLabel4.setText("Temperatura (°K):");
+
+        txtTempFuel.setText("298");
 
         jLabel5.setText("Presión (kPa):");
+
+        txtPreFuel.setText("101");
 
         comboFuel2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona Combustible..." }));
 
@@ -179,9 +183,13 @@ public class MainVista extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aire", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Georgia", 0, 14), new java.awt.Color(51, 51, 255))); // NOI18N
 
-        jLabel6.setText("Temperatura (°C):");
+        jLabel6.setText("Temperatura (°K):");
+
+        txtTempAir.setText("298");
 
         jLabel7.setText("Presión (kPa):");
+
+        txtPreAir.setText("101");
 
         aire.add(radioTeorico);
         radioTeorico.setText("Aire Teórico");
@@ -245,7 +253,7 @@ public class MainVista extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Productos de Combustión", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Georgia", 0, 14), new java.awt.Color(51, 51, 255))); // NOI18N
 
-        jLabel9.setText("Temperatura (°C):");
+        jLabel9.setText("Temperatura (°K):");
 
         jLabel10.setText("Presión (kPa):");
 
@@ -298,7 +306,7 @@ public class MainVista extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -16,6 +16,9 @@ public class Sustancia {
     double Cpc;
     double Cpd;
     double Hform;
+    double nC;
+    double nH;
+    double nO;
     private static Conexion conn;
     
     public Sustancia()
@@ -29,7 +32,9 @@ public class Sustancia {
         Cpc=0;
         Cpd=0;
         Hform=0;
-        
+        nC=0;
+        nH=0;
+        nO=0;
     }
 
     
@@ -56,7 +61,9 @@ public class Sustancia {
                 sustancia.setCpc(rs.getDouble(6));
                 sustancia.setCpd(rs.getDouble(7));
                 sustancia.setHform(rs.getDouble(8));
-                
+                sustancia.setnC(rs.getDouble(9));
+                sustancia.setnH(rs.getDouble(10));
+                sustancia.setnO(rs.getDouble(11));
                 sustancias.add(sustancia);
             }
             
@@ -131,6 +138,32 @@ public class Sustancia {
     public void setFormula(String formula) {
         this.formula = formula;
     }
+
+    public double getnC() {
+        return nC;
+    }
+
+    public void setnC(double nC) {
+        this.nC = nC;
+    }
+
+    public double getnH() {
+        return nH;
+    }
+
+    public void setnH(double nH) {
+        this.nH = nH;
+    }
+
+    public double getnO() {
+        return nO;
+    }
+
+    public void setnO(double nO) {
+        this.nO = nO;
+    }
+    
+    
     
     
 }

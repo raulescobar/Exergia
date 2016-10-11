@@ -53,7 +53,7 @@
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <EmptySpace pref="23" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -208,10 +208,13 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;C):"/>
+            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;K):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTempFuel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="298"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
@@ -224,6 +227,9 @@
         <Component class="javax.swing.JSeparator" name="jSeparator1">
         </Component>
         <Component class="javax.swing.JTextField" name="txtPreFuel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="101"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
@@ -368,10 +374,13 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;C):"/>
+            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;K):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTempAir">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="298"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
@@ -382,6 +391,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtPreAir">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="101"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
@@ -476,7 +488,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;C):"/>
+            <Property name="text" type="java.lang.String" value="Temperatura (&#xb0;K):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
