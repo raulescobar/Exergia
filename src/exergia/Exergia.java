@@ -2,7 +2,6 @@
 package exergia;
 
 import controladores.*;
-import java.util.Locale;
 import modelos.Sustancia;
 import vistas.*;
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import vistas.*;
 import modelos.*;
+import util.TempAdiabatica;
 
 public class MainController implements ActionListener,KeyListener{
     
@@ -129,6 +130,10 @@ public class MainController implements ActionListener,KeyListener{
                          yAir = (Double.parseDouble(vista.txtAire.getText())/100)+1;
                     }
                     
+                    
+                    //TempAdiabatica temp = new TempAdiabatica(0,0,0,0);
+                   
+                    
                     double pp =0;
                     double cte=0;
                     double coefOxigeno;
@@ -142,6 +147,8 @@ public class MainController implements ActionListener,KeyListener{
                     coefOxigeno += (yFuel2*(sustancias.get(Fuel2).getnC()+(sustancias.get(Fuel2).getnH()/4)-(sustancias.get(Fuel2).getnO()/2)));
                     coefOxigeno = yAir*coefOxigeno; 
                     coefNitrogeno = coefOxigeno*3.76;
+                    
+                    TempAdiabatica.calcular(coefOxigeno,coefNitrogeno,coefDioxido,coefAgua);
                     
                     //Reactivos
                     /**Entalpias de formación**/
@@ -171,7 +178,7 @@ public class MainController implements ActionListener,KeyListener{
                     cte -= (coefOxigeno-coefOxigeno/yAir)*entalpia(0,298);//Oxigeno
                     
                     double mTotales = coefDioxido+coefAgua+coefNitrogeno+(coefOxigeno-coefOxigeno/yAir);
-                    System.out.println("Totales: " +mTotales);
+                    
                     double a=0;
                     a += coefDioxido*sustancias.get(2).getCpa();
                     a += coefAgua*sustancias.get(3).getCpa();
@@ -198,14 +205,6 @@ public class MainController implements ActionListener,KeyListener{
                     
                     /*Método de la secante para resover ecuación*/
                   
-                     double z = 8*(entalpia(2,2395)-entalpia(2,298));
-                    
-                     z += 9*(entalpia(3,2395)-entalpia(3,298));
-                    
-                    z += 47*(entalpia(1,2395)-entalpia(1,298));
-                    System.out.println("CO2: "+(cte));
-                    System.out.println("CO2: "+(z));
-                    System.out.println("CO2: "+(z+cte));
                     
                     double t1 =298;
                     double t2=300;
@@ -213,14 +212,12 @@ public class MainController implements ActionListener,KeyListener{
                     double f2=0;
                     double aux;
                     double faux;
-                    f1=funcion(2395,a,b,c,d,cte);
-                    System.out.println("Evualuada" +(f1));
-                    System.out.println(a);
-                    System.out.println(b);
-                    System.out.println(c);
-                    System.out.println(d);
+                    
+                    int i = 0;
                     while(true)
                     {
+                        i++;
+                        System.out.println("Iteración #" +i);
                         f1=funcion(t1,a,b,c,d,cte);
                     
                         f2=funcion(t2,a,b,c,d,cte);
