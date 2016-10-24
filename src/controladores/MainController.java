@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import vistas.*;
 import modelos.*;
+import util.ExQuimica;
+import util.ExTermoMeca;
 import util.TempAdiabatica;
 
 public class MainController implements ActionListener,KeyListener{
@@ -106,17 +108,24 @@ public class MainController implements ActionListener,KeyListener{
                     presFuel = Double.parseDouble(vista.txtPreFuel.getText());
                     
                     Fuel1 = vista.comboFuel1.getSelectedIndex()-1;
+                    
                     if(vista.checkFuel.isSelected())
                     {
                         Fuel2 = vista.comboFuel2.getSelectedIndex()-1;
                         yFuel1 = Double.parseDouble(vista.txtFrac1.getText());
                         yFuel2 = Double.parseDouble(vista.txtFrac2.getText());
                         
+                        
                     }else{
+
                         Fuel2 = 0;
                         yFuel1 = 1;
                         yFuel2 = 0;
+                        
                     }
+                    
+                    
+                    
                     
                     tempAir = Double.parseDouble(vista.txtTempAir.getText());
                     presAir = Double.parseDouble(vista.txtTempAir.getText());
@@ -148,8 +157,7 @@ public class MainController implements ActionListener,KeyListener{
                     coefOxigeno = yAir*coefOxigeno; 
                     coefNitrogeno = coefOxigeno*3.76;
                     
-                    TempAdiabatica.calcular(coefOxigeno,coefNitrogeno,coefDioxido,coefAgua);
-                    
+
                     //Reactivos
                     /**Entalpias de formación**/
                     cte -= yFuel1*sustancias.get(Fuel1).getHform();
@@ -177,7 +185,7 @@ public class MainController implements ActionListener,KeyListener{
                     cte -= coefNitrogeno*entalpia(1,298);//Nitrogeno
                     cte -= (coefOxigeno-coefOxigeno/yAir)*entalpia(0,298);//Oxigeno
                     
-                    double mTotales = coefDioxido+coefAgua+coefNitrogeno+(coefOxigeno-coefOxigeno/yAir);
+                    
                     
                     double a=0;
                     a += coefDioxido*sustancias.get(2).getCpa();
@@ -210,32 +218,87 @@ public class MainController implements ActionListener,KeyListener{
                     double t2=300;
                     double f1=0;
                     double f2=0;
-                    double aux;
+                    double TempPr;
                     double faux;
                     
                     int i = 0;
                     while(true)
                     {
                         i++;
-                        System.out.println("Iteración #" +i);
+                       
                         f1=funcion(t1,a,b,c,d,cte);
                     
                         f2=funcion(t2,a,b,c,d,cte);
 
-                        aux = (t1*f2-t2*f1)/(f2-f1);
-                        faux = funcion(aux,a,b,c,d,cte);
+                        TempPr = (t1*f2-t2*f1)/(f2-f1);
+                        faux = funcion(TempPr,a,b,c,d,cte);
                         
                         if(Math.abs(faux)>=0.1)
                         {
                             t1 = t2;
-                            t2 = aux;
+                            t2 = TempPr;
                         }else{break;}
                         
                     }
+                    
                     NumberFormat df = new DecimalFormat("#0.00");     
                     
-                    vista.txtTempProd.setText(String.valueOf(df.format(aux)));
+                    vista.txtTempProd.setText(String.valueOf(df.format(TempPr)));
                     
+                    /*Combustible */
+                    double exTmComb=0;
+                    exTmComb = yFuel1*ExTermoMeca.calcular(Fuel1, tempFuel);
+                    exTmComb += yFuel2*ExTermoMeca.calcular(Fuel2,tempFuel);
+                    vista.txtTmFuel.setText(String.valueOf(df.format(exTmComb)));
+                    
+                    double exQuComb=0;
+                    exQuComb = yFuel1*ExQuimica.Fuel(Fuel1);
+                    exQuComb += yFuel2*ExQuimica.Fuel(Fuel2);
+                    vista.txtQuFuel.setText(String.valueOf(df.format(exQuComb)));
+                    
+                    double exToComb=0;
+                    exToComb = exTmComb + exQuComb;
+                    vista.txtToFuel.setText(String.valueOf(df.format(exToComb)));
+                    /*Combustible */
+                    
+                    /*Aire */
+                    double exTmAir=0;
+                    exTmAir = ExTermoMeca.calcular(0, tempAir);
+                    exTmAir += ExTermoMeca.calcular(1, tempAir);
+                    vista.txtTmAir.setText(String.valueOf(df.format(exTmAir)));
+                    
+                    double exQuAir = 0;
+                    exQuAir = ExQuimica.productos(true, coefOxigeno, coefNitrogeno, 0, 0);
+                    
+                    vista.txtQuAir.setText(String.valueOf(df.format(exQuAir)));
+                    
+                    
+                    double exToAir=0;
+                    exToAir = exTmAir + exQuAir;
+                    vista.txtToAir.setText(String.valueOf(df.format(exToAir)));
+                    
+                    /*Air */
+                    
+                    /*Productos de Combustión*/
+                    double exTmPro=0;
+                    exTmPro = coefDioxido*ExTermoMeca.calcular(2, TempPr);
+                    exTmPro += coefAgua*ExTermoMeca.calcular(3, TempPr);
+                    exTmPro += coefNitrogeno*ExTermoMeca.calcular(1, TempPr);
+                    exTmPro += coefOxigeno*ExTermoMeca.calcular(0, TempPr);
+                    vista.txtTmPro.setText(String.valueOf(df.format(exTmPro)));
+
+                    double exQuPro = 0;
+                    double coefOxigenoPro = (coefOxigeno-coefOxigeno/yAir);
+                    exQuPro = ExQuimica.productos(false, coefOxigenoPro, coefNitrogeno, coefAgua, coefDioxido);
+                    vista.txtQuPro.setText(String.valueOf(df.format(exQuPro)));
+                    
+                    double exToPro=0;
+                    exToPro = exTmPro + exQuPro;
+                    vista.txtToPro.setText(String.valueOf(df.format(exToPro)));
+                    
+                    /*Productos de Combustión*/
+                    
+                   
                 }
             }
             
@@ -298,6 +361,20 @@ public class MainController implements ActionListener,KeyListener{
         
         
         return entalpia;
+    }
+    public double entropia(int id,double temp)
+    {
+        double entropia =0;
+        double a = sustancias.get(id).getCpa();
+        double b = sustancias.get(id).getCpb();
+        double c = sustancias.get(id).getCpc();
+        double d = sustancias.get(id).getCpd();
+        entropia += a*(Math.log(temp));
+        entropia += b*(temp);
+        entropia += (c*Math.pow((temp),2))/2;
+        entropia += (d*Math.pow((temp),3))/3;
+        entropia = entropia*4.1868; //Conversion pansdo de KCal a KJ
+        return entropia;
     }
     
     public int buscarId(String formula)
@@ -380,6 +457,15 @@ public class MainController implements ActionListener,KeyListener{
         vista.txtTempProd.addActionListener(this);
         vista.txtPreProd.addActionListener(this);
         vista.btnCalcular.addActionListener(this);
+        vista.txtTmFuel.addActionListener(this);
+        vista.txtQuFuel.addActionListener(this);
+        vista.txtToFuel.addActionListener(this);
+        vista.txtTmAir.addActionListener(this);
+        vista.txtQuAir.addActionListener(this);
+        vista.txtToAir.addActionListener(this);
+        vista.txtTmPro.addActionListener(this);
+        vista.txtQuPro.addActionListener(this);
+        vista.txtToPro.addActionListener(this);
                
         vista.txtFrac1.setEditable(false);
         vista.txtFrac2.setEditable(false);
@@ -389,6 +475,8 @@ public class MainController implements ActionListener,KeyListener{
         
         vista.txtTempProd.setEditable(false);
         vista.txtPreProd.setEditable(false);
+        
+        
     }
     
     

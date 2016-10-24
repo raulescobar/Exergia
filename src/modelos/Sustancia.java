@@ -16,6 +16,7 @@ public class Sustancia {
     double Cpc;
     double Cpd;
     double Hform;
+    double Gform;
     double nC;
     double nH;
     double nO;
@@ -32,6 +33,7 @@ public class Sustancia {
         Cpc=0;
         Cpd=0;
         Hform=0;
+        Gform=0;
         nC=0;
         nH=0;
         nO=0;
@@ -61,9 +63,10 @@ public class Sustancia {
                 sustancia.setCpc(rs.getDouble(6));
                 sustancia.setCpd(rs.getDouble(7));
                 sustancia.setHform(rs.getDouble(8));
-                sustancia.setnC(rs.getDouble(9));
-                sustancia.setnH(rs.getDouble(10));
-                sustancia.setnO(rs.getDouble(11));
+                sustancia.setGform(rs.getDouble(9));
+                sustancia.setnC(rs.getDouble(10));
+                sustancia.setnH(rs.getDouble(11));
+                sustancia.setnO(rs.getDouble(12));
                 sustancias.add(sustancia);
             }
             
@@ -161,6 +164,14 @@ public class Sustancia {
 
     public void setnO(double nO) {
         this.nO = nO;
+    }
+
+    public double getGform() {
+        return Gform;
+    }
+
+    public void setGform(double Gform) {
+        this.Gform = Gform;
     }
     
     
