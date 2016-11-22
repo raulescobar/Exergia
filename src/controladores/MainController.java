@@ -13,12 +13,15 @@ import modelos.*;
 import util.ExQuimica;
 import util.ExTermoMeca;
 import util.TempAdiabatica;
+import util.entradaTemperatura;
+import util.SobreCalentado;
 
 public class MainController implements ActionListener,KeyListener{
     
     MainVista vista = new MainVista();
     Sustancia modelo = new Sustancia();
     ArrayList<Sustancia> sustancias;
+    
     double tempFuel;
     double presFuel;
     int Fuel1;
@@ -37,8 +40,6 @@ public class MainController implements ActionListener,KeyListener{
         cargarListener();
         this.modelo = modelo;
         
-        
-            
         this.sustancias = modelo.find();
         
         vista.radioTeorico.setSelected(true);
@@ -298,7 +299,75 @@ public class MainController implements ActionListener,KeyListener{
                     
                     /*Productos de Combustión*/
                     
+                    /*Calculo del calor de la reacción de combustión*/
+                    double hProductos =0;
+                    double hReactivos =0;
+                    
+                    /*Entalpia de los productos*/
+                    hProductos += coefDioxido*sustancias.get(2).getHform();//Dioxido de Carbono
+                    hProductos += coefAgua*sustancias.get(3).getHform();//Agua
+                    hProductos += coefNitrogeno*sustancias.get(1).getHform();//Nitrogeno = 0
+                    hProductos += coefOxigenoPro*sustancias.get(0).getHform();//Oxigeno en exceso = 0
+                    
+                    hProductos += coefDioxido*(entalpia(2,TempPr)-entalpia(2,298));//Dioxido de Carbono
+                    hProductos += coefAgua*(entalpia(3,TempPr)-entalpia(3,298));//Agua
+                    hProductos += coefNitrogeno*(entalpia(1,TempPr)-entalpia(1,298));//Nitrogeno
+                    hProductos += coefOxigenoPro*(entalpia(0,TempPr)-entalpia(0,298));//Oxigeno
                    
+                    /*Entalpia de los productos*/
+                    
+                    /*Entalpia de los reactivos*/
+
+                    /**Entalpias de formación**/
+                    hReactivos += yFuel1*sustancias.get(Fuel1).getHform();
+                    hReactivos += yFuel2*sustancias.get(Fuel2).getHform();
+                    hReactivos += coefOxigeno*sustancias.get(0).getHform();//Oxigeno = 0;
+                    hReactivos += coefNitrogeno*sustancias.get(1).getHform();//Nitrogeno = 0;
+                    
+                    /**Cambio en la entalpia**/
+                    hReactivos += yFuel1*(entalpia(Fuel1,tempFuel)-entalpia(Fuel1,298));
+                    hReactivos += yFuel2*(entalpia(Fuel2,tempFuel)-entalpia(Fuel2,298));
+                    hReactivos += coefOxigeno*(entalpia(0,tempAir)-entalpia(0,298));//Oxigeno
+                    hReactivos += coefNitrogeno*(entalpia(1,tempAir)-entalpia(1,298));//Nitrogeno
+                    //Reactivos
+                    
+                    
+                    double presion1;
+                    double temp1;
+                    double h1;
+                    double s1;
+                    
+                    double presion2;
+                    double temp2;
+                    double h2;
+                    double s2;
+                    
+                    double presion3;
+                    double temp3;
+                    double h3;
+                    double s3;
+                    
+                    double presion4;
+                    double temp4;
+                    double h4;
+                    double s4;
+                    
+                    
+                    presion1 = 0.01;
+                    presion2 = 0.1;
+                    temp1 = 170.0;
+                    
+                    if(entradaTemperatura.region(temp1, presion1)==0)
+                    {
+                        h1 = entradaTemperatura.entalpia(temp1,1);
+                        s1 = entradaTemperatura.entropia(temp1, 1);
+                                
+                    }else{
+                        System.err.println("Sobrecalentado");
+                    }
+                    
+                    SobreCalentado.listar();
+                    
                 }
             }
             
