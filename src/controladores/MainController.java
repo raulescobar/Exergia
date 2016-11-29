@@ -12,8 +12,9 @@ import vistas.*;
 import modelos.*;
 import util.ExQuimica;
 import util.ExTermoMeca;
-import util.TempAdiabatica;
+//import util.TempAdiabatica;
 import util.entradaTemperatura;
+import util.entradaPresion;
 import util.SobreCalentado;
 
 public class MainController implements ActionListener,KeyListener{
@@ -48,13 +49,7 @@ public class MainController implements ActionListener,KeyListener{
             vista.comboFuel1.addItem(sustancia.getNombre());
             vista.comboFuel2.addItem(sustancia.getNombre());
         }
-        /** Método obsoleto para recorrer una instancia de una clase**/
-        /*for(int i=0;i<numSustancias;i++)
-        {
-            vista.comboFuel1.addItem(sustancias.get(i).getNombre());
-            vista.comboFuel2.addItem(sustancias.get(i).getNombre());
-
-        }*/
+        
     }
     
     /** Metodos Abstractos **/
@@ -217,8 +212,8 @@ public class MainController implements ActionListener,KeyListener{
                     
                     double t1 =298;
                     double t2=300;
-                    double f1=0;
-                    double f2=0;
+                    double f1;
+                    double f2;
                     double TempPr;
                     double faux;
                     
@@ -247,126 +242,215 @@ public class MainController implements ActionListener,KeyListener{
                     vista.txtTempProd.setText(String.valueOf(df.format(TempPr)));
                     
                     /*Combustible */
-                    double exTmComb=0;
+                    double exTmComb;
                     exTmComb = yFuel1*ExTermoMeca.calcular(Fuel1, tempFuel);
                     exTmComb += yFuel2*ExTermoMeca.calcular(Fuel2,tempFuel);
                     vista.txtTmFuel.setText(String.valueOf(df.format(exTmComb)));
                     
-                    double exQuComb=0;
+                    double exQuComb;
                     exQuComb = yFuel1*ExQuimica.Fuel(Fuel1);
                     exQuComb += yFuel2*ExQuimica.Fuel(Fuel2);
                     vista.txtQuFuel.setText(String.valueOf(df.format(exQuComb)));
                     
-                    double exToComb=0;
+                    double exToComb;
                     exToComb = exTmComb + exQuComb;
                     vista.txtToFuel.setText(String.valueOf(df.format(exToComb)));
                     /*Combustible */
                     
                     /*Aire */
-                    double exTmAir=0;
+                    double exTmAir;
                     exTmAir = ExTermoMeca.calcular(0, tempAir);
                     exTmAir += ExTermoMeca.calcular(1, tempAir);
                     vista.txtTmAir.setText(String.valueOf(df.format(exTmAir)));
                     
-                    double exQuAir = 0;
+                    double exQuAir;
                     exQuAir = ExQuimica.productos(true, coefOxigeno, coefNitrogeno, 0, 0);
                     
                     vista.txtQuAir.setText(String.valueOf(df.format(exQuAir)));
                     
                     
-                    double exToAir=0;
+                    double exToAir;
                     exToAir = exTmAir + exQuAir;
                     vista.txtToAir.setText(String.valueOf(df.format(exToAir)));
                     
                     /*Air */
                     
                     /*Productos de Combustión*/
-                    double exTmPro=0;
+                    double exTmPro;
                     exTmPro = coefDioxido*ExTermoMeca.calcular(2, TempPr);
                     exTmPro += coefAgua*ExTermoMeca.calcular(3, TempPr);
                     exTmPro += coefNitrogeno*ExTermoMeca.calcular(1, TempPr);
                     exTmPro += coefOxigeno*ExTermoMeca.calcular(0, TempPr);
                     vista.txtTmPro.setText(String.valueOf(df.format(exTmPro)));
 
-                    double exQuPro = 0;
+                    double exQuPro;
                     double coefOxigenoPro = (coefOxigeno-coefOxigeno/yAir);
                     exQuPro = ExQuimica.productos(false, coefOxigenoPro, coefNitrogeno, coefAgua, coefDioxido);
                     vista.txtQuPro.setText(String.valueOf(df.format(exQuPro)));
                     
-                    double exToPro=0;
+                    double exToPro;
                     exToPro = exTmPro + exQuPro;
                     vista.txtToPro.setText(String.valueOf(df.format(exToPro)));
                     
                     /*Productos de Combustión*/
                     
                     /*Calculo del calor de la reacción de combustión*/
-                    double hProductos =0;
-                    double hReactivos =0;
+                    double hProductos1 =0;
+                    double hProductos2 =0;
                     
                     /*Entalpia de los productos*/
-                    hProductos += coefDioxido*sustancias.get(2).getHform();//Dioxido de Carbono
-                    hProductos += coefAgua*sustancias.get(3).getHform();//Agua
-                    hProductos += coefNitrogeno*sustancias.get(1).getHform();//Nitrogeno = 0
-                    hProductos += coefOxigenoPro*sustancias.get(0).getHform();//Oxigeno en exceso = 0
                     
-                    hProductos += coefDioxido*(entalpia(2,TempPr)-entalpia(2,298));//Dioxido de Carbono
-                    hProductos += coefAgua*(entalpia(3,TempPr)-entalpia(3,298));//Agua
-                    hProductos += coefNitrogeno*(entalpia(1,TempPr)-entalpia(1,298));//Nitrogeno
-                    hProductos += coefOxigenoPro*(entalpia(0,TempPr)-entalpia(0,298));//Oxigeno
+                    
+                    hProductos1 += coefDioxido*(entalpia(2,TempPr)-entalpia(2,298));//Dioxido de Carbono
+                    hProductos1 += coefAgua*(entalpia(3,TempPr)-entalpia(3,298));//Agua
+                    hProductos1 += coefNitrogeno*(entalpia(1,TempPr)-entalpia(1,298));//Nitrogeno
+                    hProductos1 += coefOxigenoPro*(entalpia(0,TempPr)-entalpia(0,298));//Oxigeno
                    
                     /*Entalpia de los productos*/
                     
-                    /*Entalpia de los reactivos*/
+                    /*Entalpia de los Productos a la salida*/
 
-                    /**Entalpias de formación**/
-                    hReactivos += yFuel1*sustancias.get(Fuel1).getHform();
-                    hReactivos += yFuel2*sustancias.get(Fuel2).getHform();
-                    hReactivos += coefOxigeno*sustancias.get(0).getHform();//Oxigeno = 0;
-                    hReactivos += coefNitrogeno*sustancias.get(1).getHform();//Nitrogeno = 0;
-                    
                     /**Cambio en la entalpia**/
-                    hReactivos += yFuel1*(entalpia(Fuel1,tempFuel)-entalpia(Fuel1,298));
-                    hReactivos += yFuel2*(entalpia(Fuel2,tempFuel)-entalpia(Fuel2,298));
-                    hReactivos += coefOxigeno*(entalpia(0,tempAir)-entalpia(0,298));//Oxigeno
-                    hReactivos += coefNitrogeno*(entalpia(1,tempAir)-entalpia(1,298));//Nitrogeno
+                    double TempPr2 = 500;
+                    hProductos2 += coefDioxido*(entalpia(2,TempPr2)-entalpia(2,298));//Dioxido de Carbono
+                    hProductos2 += coefAgua*(entalpia(3,TempPr2)-entalpia(3,298));//Agua
+                    hProductos2 += coefNitrogeno*(entalpia(1,TempPr2)-entalpia(1,298));//Nitrogeno
+                    hProductos2 += coefOxigenoPro*(entalpia(0,TempPr2)-entalpia(0,298));//Oxigeno
                     //Reactivos
                     
+                   
                     
                     double presion1;
                     double temp1;
                     double h1;
                     double s1;
+                    double x1;
                     
                     double presion2;
                     double temp2;
-                    double h2;
+                    double h2 = 0;
                     double s2;
+                    double x2;
                     
                     double presion3;
                     double temp3;
                     double h3;
                     double s3;
+                    double x3;
                     
                     double presion4;
                     double temp4;
                     double h4;
                     double s4;
+                    double x4;
                     
+                    presion1 = Double.parseDouble(vista.txtE1Pres.getText());
                     
-                    presion1 = 0.01;
-                    presion2 = 0.1;
-                    temp1 = 170.0;
+                    temp1 = Double.parseDouble(vista.txtE1Temp.getText());
+                    presion2 = Double.parseDouble(vista.txtE2Pres.getText());
                     
+                    //Estado 1
                     if(entradaTemperatura.region(temp1, presion1)==0)
                     {
-                        h1 = entradaTemperatura.entalpia(temp1,1);
-                        s1 = entradaTemperatura.entropia(temp1, 1);
-                                
+                        h1 = SobreCalentado.entalpia(temp1,presion1);
+                        s1 = SobreCalentado.entropia(temp1,presion1);
+                        
+                        vista.txtE1Region.setText("Sobrecalentado");
+                        
                     }else{
-                        System.err.println("Sobrecalentado");
+                        x1 = 1;
+                        h1 = entradaTemperatura.entalpia(temp1,x1);
+                        s1 = entradaTemperatura.entropia(temp1, x1);
+                        vista.txtE1Region.setText("Saturado");
                     }
+                    vista.txtE1H.setText(String.valueOf(df.format(h1)));
+                    vista.txtE1S.setText(String.valueOf(df.format(s1)));
+                    //Estado 2
+                    s2 = s1;
+                    x2 = entradaPresion.calidad(presion2, s2);
+                    if(x2>=0 && x2<=1)
+                    {
+                        h2 = entradaPresion.entalpia(presion2, x2);
+                        temp2 = entradaPresion.saturacion(presion2);
+                        vista.txtE2Region.setText("Saturado");
+                    }else {
+                        temp2 = SobreCalentado.temperatura(s2, presion2);
+                        h2 = SobreCalentado.entalpia(temp2,presion2);
+                        vista.txtE2Region.setText("Sobrecalentado");
+                        
+                    }
+                    vista.txtE2Temp.setText(String.valueOf(df.format(temp2)));
+                    vista.txtE2H.setText(String.valueOf(df.format(h2)));
+                    vista.txtE2S.setText(String.valueOf(df.format(s2)));
+                    //Estado 3
+                    presion3 = presion2;
+                    temp3 = entradaPresion.saturacion(presion3);
+                    x3 = 0;
+                    h3 = entradaTemperatura.entalpia(temp3, x3);
+                    s3 = entradaTemperatura.entropia(temp3, x3);
+                    double v3 = entradaTemperatura.volumen(temp3, x3);
+                    vista.txtE3Temp.setText(String.valueOf(df.format(temp3)));
+                    vista.txtE3Pres.setText(String.valueOf(df.format(presion2)));
+                    vista.txtE3H.setText(String.valueOf(df.format(h3)));
+                    vista.txtE3S.setText(String.valueOf(df.format(s3)));
+                    vista.txtE3Region.setText("Saturado");
                     
-                    SobreCalentado.listar();
+                    //Estado 4 
+                    presion4 = presion1;
+                    temp4 = temp3;
+                    h4 = v3*(presion4-presion3)*1000 + h3;
+                    s4 = s3;
+                    vista.txtE4Temp.setText(String.valueOf(df.format(temp4)));
+                    vista.txtE4Pres.setText(String.valueOf(df.format(presion4)));
+                    vista.txtE4H.setText(String.valueOf(df.format(h4)));
+                    vista.txtE4S.setText(String.valueOf(df.format(s4)));
+                    vista.txtE4Region.setText("Comprimido");
+                    
+                    double Wturbina;
+                    double Wbomba;
+                    double Qcaldera;
+                    double Qcondensador;
+                    double eficiencia;
+                    
+                    Wturbina = h1-h2;
+                    Wbomba = h4-h3;
+                    Qcaldera = h1-h4;
+                    Qcondensador = h2-h3;
+                    
+                    eficiencia = ((Wturbina-Wbomba)/Qcaldera)*100;
+                    
+                    double Magua;
+                    double Mfuel;
+                    Mfuel = yFuel1*sustancias.get(Fuel1).getPeso() + yFuel2*sustancias.get(Fuel2).getPeso();
+                    Magua = (hProductos1-hProductos2)/((h1-h4));
+                    
+                    
+                    
+                    
+                    double exProductos1;
+                    exProductos1 = coefDioxido*ExTermoMeca.calcular(2, TempPr);
+                    exProductos1 += coefAgua*ExTermoMeca.calcular(3, TempPr);
+                    exProductos1 += coefNitrogeno*ExTermoMeca.calcular(1, TempPr);
+                    exProductos1 += coefOxigeno*ExTermoMeca.calcular(0, TempPr);
+                    
+                    double exProductos2;
+                    exProductos2 = coefDioxido*ExTermoMeca.calcular(2, TempPr2);
+                    exProductos2 += coefAgua*ExTermoMeca.calcular(3, TempPr2);
+                    exProductos2 += coefNitrogeno*ExTermoMeca.calcular(1, TempPr2);
+                    exProductos2 += coefOxigeno*ExTermoMeca.calcular(0, TempPr2);
+                    
+                    double exdCaldera;
+                    exdCaldera = Magua*(h4-h1-298*(s4-s1)) + (exProductos1-exProductos2);
+                    
+                    double nExergetica;
+                    nExergetica = ((Wturbina*Magua)/exQuComb)*100;
+                    
+                    vista.txtCalorIn.setText(String.valueOf(df.format(Qcaldera)));
+                    vista.txtCalorOut.setText(String.valueOf(df.format(Qcondensador)));
+                    vista.txtTrabajoT.setText(String.valueOf(df.format(Wturbina)));
+                    vista.txtTrabajoP.setText(String.valueOf(df.format(Wbomba)));
+                    vista.txtEficienciaT.setText(String.valueOf(df.format(eficiencia)));
+                    vista.txtEficienciaE.setText(String.valueOf(df.format(nExergetica)));
                     
                 }
             }
@@ -392,7 +476,7 @@ public class MainController implements ActionListener,KeyListener{
     
     public double funcion(double x,double a,double b,double c,double d, double cte)
     {
-        double resultado=0;
+        double resultado;
         resultado = (a*x + (b*Math.pow(x, 2))/2+ (c*Math.pow(x, 3))/3 + (d*Math.pow(x, 4))/4)*4.1868+cte ;
         return resultado;
     }
@@ -446,22 +530,7 @@ public class MainController implements ActionListener,KeyListener{
         return entropia;
     }
     
-    public int buscarId(String formula)
-    {
-        int id=-1;
-        String simboloUser = formula.toUpperCase();
-        
-        for(Sustancia sustancia : sustancias)
-        {
-            String simboloBD = sustancia.getFormula().toUpperCase();
-            if(simboloBD.equals(simboloUser))
-            {
-                id = sustancia.getId()-1;
-                break;
-            }
-        }
-        return id;
-    }
+    
     
     public boolean verificarCombustible()
     {
@@ -535,6 +604,37 @@ public class MainController implements ActionListener,KeyListener{
         vista.txtTmPro.addActionListener(this);
         vista.txtQuPro.addActionListener(this);
         vista.txtToPro.addActionListener(this);
+        
+        vista.txtE1Temp.addActionListener(this);
+        vista.txtE1Pres.addActionListener(this);
+        vista.txtE1H.addActionListener(this);
+        vista.txtE1S.addActionListener(this);
+        vista.txtE1Region.addActionListener(this);
+        
+        vista.txtE2Temp.addActionListener(this);
+        vista.txtE2Pres.addActionListener(this);
+        vista.txtE2H.addActionListener(this);
+        vista.txtE2S.addActionListener(this);
+        vista.txtE2Region.addActionListener(this);
+        
+        vista.txtE3Temp.addActionListener(this);
+        vista.txtE3Pres.addActionListener(this);
+        vista.txtE3H.addActionListener(this);
+        vista.txtE3S.addActionListener(this);
+        vista.txtE3Region.addActionListener(this);
+        
+        vista.txtE4Temp.addActionListener(this);
+        vista.txtE4Pres.addActionListener(this);
+        vista.txtE4H.addActionListener(this);
+        vista.txtE4S.addActionListener(this);
+        vista.txtE4Region.addActionListener(this);
+        
+        vista.txtCalorIn.addActionListener(this);
+        vista.txtCalorOut.addActionListener(this);
+        vista.txtTrabajoT.addActionListener(this);
+        vista.txtTrabajoP.addActionListener(this);
+        vista.txtEficienciaT.addActionListener(this);
+        vista.txtEficienciaE.addActionListener(this);
                
         vista.txtFrac1.setEditable(false);
         vista.txtFrac2.setEditable(false);
@@ -544,6 +644,37 @@ public class MainController implements ActionListener,KeyListener{
         
         vista.txtTempProd.setEditable(false);
         vista.txtPreProd.setEditable(false);
+        
+       
+        vista.txtE1H.setEditable(false);
+        vista.txtE1S.setEditable(false);
+        vista.txtE1Region.setEditable(false);
+        
+        vista.txtE2Temp.setEditable(false);
+        
+        vista.txtE2H.setEditable(false);
+        vista.txtE2S.setEditable(false);
+        vista.txtE2Region.setEditable(false);
+        
+        vista.txtE3Temp.setEditable(false);
+        vista.txtE3Pres.setEditable(false);
+        vista.txtE3H.setEditable(false);
+        vista.txtE3S.setEditable(false);
+        vista.txtE3Region.setEditable(false);
+        
+        vista.txtE4Temp.setEditable(false);
+        vista.txtE4Pres.setEditable(false);
+        vista.txtE4H.setEditable(false);
+        vista.txtE4S.setEditable(false);
+        vista.txtE4Region.setEditable(false);
+        
+        vista.txtCalorIn.setEditable(false);
+        vista.txtCalorOut.setEditable(false);
+        vista.txtTrabajoT.setEditable(false);
+        vista.txtTrabajoP.setEditable(false);
+        vista.txtEficienciaT.setEditable(false);
+        vista.txtEficienciaE.setEditable(false);
+        
         
         
     }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Sustancia {
     int id;
     String nombre;
-    String formula;
+    double peso;
     double Cpa;
     double Cpb;
     double Cpc;
@@ -27,7 +27,7 @@ public class Sustancia {
         conn = new Conexion();
         id = 0;
         nombre="";
-        formula="";
+        peso=0;
         Cpa=0;
         Cpb=0;
         Cpc=0;
@@ -57,7 +57,7 @@ public class Sustancia {
                 
                 sustancia.setId(rs.getInt(1));
                 sustancia.setNombre(rs.getString(2));
-                sustancia.setFormula(rs.getString(3));
+                sustancia.setPeso(rs.getDouble(3));
                 sustancia.setCpa(rs.getDouble(4));
                 sustancia.setCpb(rs.getDouble(5));
                 sustancia.setCpc(rs.getDouble(6));
@@ -134,12 +134,12 @@ public class Sustancia {
         this.Hform = Hform;
     }
 
-    public String getFormula() {
-        return formula;
+    public double getPeso() {
+        return peso;
     }
 
-    public void setFormula(String formula) {
-        this.formula = formula;
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 
     public double getnC() {

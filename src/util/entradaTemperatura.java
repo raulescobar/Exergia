@@ -16,7 +16,7 @@ public class entradaTemperatura {
         double hf;
         double hfg;
         size = temperatura.size();
-        if(t>373.95)
+        if(t>373.90)
         {
             h = -1;
         }else{
@@ -96,6 +96,51 @@ public class entradaTemperatura {
         return s;
     }
     
+    public static double volumen(double t,double x)
+    {
+        double v =0;
+        int size;
+        double vf;
+        double vfg;
+        size = temperatura.size();
+        if(t>373.95)
+        {
+            v = -1;
+        }else{
+            for(int i=0;i<size;i++)
+            {
+                if(temperatura.get(i).getT()==t)
+                {
+                   vf = temperatura.get(i).getVf();
+                   vfg = temperatura.get(i).getVg() - vf;
+                   
+                   v = vf + x*vfg;
+                   break;
+                }else if(t>temperatura.get(i).getT()&& t<temperatura.get(i+1).getT()){
+                    
+                    double t1 = temperatura.get(i).getT();
+                    double t2 = temperatura.get(i+1).getT();
+
+                    double vf1 = temperatura.get(i).getVf();
+                    double vf2 = temperatura.get(i+1).getVf();
+
+                    vf = vf1 + (((t-t1)/(t2-t1))*(vf2-vf1));
+                    
+                    double vfg1 = temperatura.get(i).getVg() - vf1;
+                    double vfg2 = temperatura.get(i+1).getVg() - vf2;
+                   
+                    vfg = vfg1 + (((t-t1)/(t2-t1))*(vfg2-vfg1));
+                    
+                    v = vf + x*vfg;
+                    break;
+                }
+            }
+        }
+        
+        
+        return v;
+    }
+    
     
     
     public static int region(double t,double presion)
@@ -122,7 +167,7 @@ public class entradaTemperatura {
                     double x2 = temperatura.get(i+1).getT();
 
                     P = y1 + (((t-x1)/(x2-x1))*(y2-y1));
-                    System.out.println("Presion de sat "+P);
+                    
                     break;
                 }       
             }
